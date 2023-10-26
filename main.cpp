@@ -28,7 +28,12 @@ void bellman(vector<vector<int>> grafo){
 
         }
     }
-    cout << minimos[minimos.size()-1] << endl;
+    int K = minimos.size()/4;
+    long long ceroPuentes = minimos[K - 1];
+    long long unPuente = minimos[2*K - 1];
+    long long dosPuentes = minimos[3*K - 1];
+    long long tresPuentes = minimos[4*K - 1];
+    cout << min(ceroPuentes,min(unPuente,min(dosPuentes,tresPuentes))) << endl;
 }
 
 int main() {
@@ -36,7 +41,7 @@ int main() {
     cin >>cantTest;
     for(int i = 0; i < cantTest; i++){
         cin >> cantSalones >> cantTuneles;
-        vector<vector<int>> caminos(cantSalones+1, vector<int>(cantSalones+1,INF));
+        vector<vector<int>> caminos((cantSalones+1)*4, vector<int>((cantSalones+1)*4,INF));
         for(int j = 0; j < caminos.size()-1;j++){
             caminos[j][j+1] = 1;
             caminos[j][j] = 0;
@@ -44,9 +49,12 @@ int main() {
 
         caminos[caminos.size()-1][caminos.size()-1] = 0;
 
+        int N = cantSalones + 1;
         for(int k = 0; k < cantTuneles; k++){
             cin >> entrada >> salida;
-            caminos[entrada][salida] = 2;
+            caminos[entrada][salida+N] = 2;
+            caminos[entrada+N][salida + 2*N] = 2;
+            caminos[entrada + 2*N][salida + 3*N] = 2;
         }
         bellman(caminos);
     }
