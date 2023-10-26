@@ -13,6 +13,7 @@ void bellman(vector<vector<int>> grafo){
     bool hayCambios = true;
     while(hayCambios){
 
+
         hayCambios = false;
         vector<long long> minimosTemp = minimos;
         for(int i = 1; i<minimosTemp.size();i++){
