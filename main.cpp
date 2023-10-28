@@ -6,15 +6,26 @@ using namespace std;
 
 int INF = numeric_limits<int>::max();
 
+void dijkstra(vector<vector<pair<int,int>>> grafo){
+    int N = grafo.size();
+    vector<bool>  = {0};
+    vector<int> minimos(N, INF);
+    minimos[0] = 0;
+    for(int i = 0; i < grafo[0].size(); i++){
+        minimos[grafo[0][i].first] = grafo[0][i].second;
+    }
+
+}
+
 void bellman(vector<vector<pair<int,int>>> grafo){
     int N = grafo.size();
     vector<long long> minimos(N,INF); //Inicio el vector con todas las distancias a la prim pos, con inf
     minimos[0] = 0; //Ir de la primer pos a primer pos cuesta 0
-    bool hayCambios; //Indica si hice algún cambio en los caminos en la iteración i
+    bool hayCambios = true; //Indica si hice algún cambio en los caminos en la iteración i
     while(hayCambios){
         hayCambios = false; //Inicio con cambio negativo
         vector<long long> minimosTemp = minimos; //Hago una copia de los caminos minimos para ver si hago cambios
-        for(int i = 1; i < N ;i++){ //itero sobre, ttodo el grafo
+        for(int i = 1; i < N ;i++){ //itero sobre  ttodo el grafo
             long long posibleNuevo = INF; // Posible nueva distancia de 0 a i
             long long TEMP;
             for(int j = 0; j<i+1; j++){ //recorro todos los vertices anteriores al que estoy parado
