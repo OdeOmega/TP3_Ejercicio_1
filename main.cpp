@@ -2,47 +2,52 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 int INF = numeric_limits<int>::max();
 
+struct MinHeap {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minHeap;
+
+    void push(pair<int, int> value) {
+        minHeap.push(value);
+    }
+    void pop() {
+        minHeap.pop();
+    }
+    pair<int, int> top() {
+        return minHeap.top();
+    }
+    size_t size() const {
+        return minHeap.size();
+    }
+    bool isEmpty() const {
+        return minHeap.empty();
+    }
+};
+
 void dijkstra(vector<vector<pair<int,int>>> grafo){
     int N = grafo.size();
-    vector<bool>  = {0};
     vector<int> minimos(N, INF);
     minimos[0] = 0;
-    for(int i = 0; i < grafo[0].size(); i++){
-        minimos[grafo[0][i].first] = grafo[0][i].second;
-    }
+    MinHeap heap;
+    heap.push({0,0});
 
-}
+    while(!heap.isEmpty()){
+        int distancia = heap.top().first;
+        int vertice = heap.top().second;
+        heap.pop();
 
-void bellman(vector<vector<pair<int,int>>> grafo){
-    int N = grafo.size();
-    vector<long long> minimos(N,INF); //Inicio el vector con todas las distancias a la prim pos, con inf
-    minimos[0] = 0; //Ir de la primer pos a primer pos cuesta 0
-    bool hayCambios = true; //Indica si hice algún cambio en los caminos en la iteración i
-    while(hayCambios){
-        hayCambios = false; //Inicio con cambio negativo
-        vector<long long> minimosTemp = minimos; //Hago una copia de los caminos minimos para ver si hago cambios
-        for(int i = 1; i < N ;i++){ //itero sobre  ttodo el grafo
-            long long posibleNuevo = INF; // Posible nueva distancia de 0 a i
-            long long TEMP;
-            for(int j = 0; j<i+1; j++){ //recorro todos los vertices anteriores al que estoy parado
-                for(int k = 0; k < grafo[j].size(); k++){ //recorro todos los lugares a los que llegan esos vertices (aristas)
-                    if(grafo[j][k].first == i){ //Veo si alguno de esos caen en el vertice donde estoy parado
-                        TEMP = minimos[j] + grafo[j][k].second; //Guardo la distancia de 0 a j + j a i
-                        posibleNuevo = min(posibleNuevo,TEMP); //Guardo el menor entre la actual encontrada y la que estaba antes
-                    }
-                }
-
-            }
-            if(posibleNuevo != minimosTemp[i]){
-                hayCambios = true;
-                minimos[i] = posibleNuevo;
+        for(int i = 0; i < grafo[vertice].size(); i++){
+            int posibleNuevaDist = minimos[vertice] + grafo[vertice][i].second;
+            if(posibleNuevaDist < minimos[grafo[vertice][i].first]){
+                minimos[grafo[vertice][i].first] = posibleNuevaDist;
+                heap.push({posibleNuevaDist,grafo[vertice][i].first});
             }
 
         }
+
     }
     int K = minimos.size()/4;
     long long ceroPuentes = minimos[K - 1];
@@ -71,7 +76,8 @@ int main() {
             caminos[entrada + 2*N].push_back({salida + 3*N,2});
         }
         int a = 0;
-        bellman(caminos);
+        dijkstra(caminos);
+        //bellman(caminos);
     }
     return 0;
 }
